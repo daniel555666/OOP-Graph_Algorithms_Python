@@ -1,1 +1,0 @@
-# init getters and setters
