@@ -1,6 +1,6 @@
-from src.CEdge import CEdge
-from src.GraphInterface import GraphInterface
-from src.CNode import CNode
+from src.Classes.CEdge import CEdge
+from src.interfaces.GraphInterface import GraphInterface
+from src.Classes.CNode import CNode
 
 
 class DiGraph(GraphInterface):

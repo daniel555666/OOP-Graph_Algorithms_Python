@@ -1,0 +1,3 @@
+global Nodes
+global Edges
+
