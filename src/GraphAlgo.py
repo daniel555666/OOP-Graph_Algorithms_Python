@@ -11,7 +11,7 @@ class GraphAlgo(GraphAlgoInterface):
         self.g = DiGraph(g)
 
     def load_from_json(self, file_name: str) -> bool:
-        file = open(file_name, "r+")
+        file = open(file_name, "r")
         GraphDict = json.load(file)
         file.close()
         graph = DiGraph()
