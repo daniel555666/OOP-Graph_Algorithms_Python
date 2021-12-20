@@ -1,5 +1,6 @@
 import json
 
+from src.Classes import SaveLoad
 from src.Classes.DiGraph import DiGraph
 from src.interfaces.GraphAlgoInterface import GraphAlgoInterface
 
@@ -11,18 +12,7 @@ class GraphAlgo(GraphAlgoInterface):
         self.g = DiGraph(g)
 
     def load_from_json(self, file_name: str) -> bool:
-        file = open(file_name, "r")
-        GraphDict = json.load(file)
-        file.close()
-        graph = DiGraph()
-        for n in GraphDict["Nodes"]:
-            pos = n["pos"].split(",")
-            xyz = (float(pos[0]), float(pos[1]), float(pos[2]))
-            node_id = int(n["id"])
-            graph.add_node(node_id, xyz)
-        for e in GraphDict["Edges"]:
-            graph.add_edge(int(e["src"]), int(e["dest"]), float(e["w"]))
-        self.g = graph
+        self.g = SaveLoad.load(file_name)
 
     def save_to_json(self, file_name: str) -> bool:
         pass
