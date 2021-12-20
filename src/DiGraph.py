@@ -1,6 +1,6 @@
-from src.CEdge import Edge
+from src.CEdge import CEdge
 from src.GraphInterface import GraphInterface
-from src.CNode import NodeV
+from src.CNode import CNode
 
 
 class DiGraph(GraphInterface):
@@ -27,9 +27,9 @@ class DiGraph(GraphInterface):
         pass
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
-        self.Edges[f"{id1}_{id2}"] = Edge(src=id1, dest=id2, w=weight)
-        self.EdgesOut[id1] = self.EdgesOut.get(id1, []) + [Edge(src=id1, dest=id2, w=weight)]
-        self.EdgesIn[id2] = self.EdgesIn.get(id2, []) + [Edge(src=id2, dest=id1, w=weight)]
+        self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
+        self.EdgesOut[id1] = self.EdgesOut.get(id1, []) + [CEdge(src=id1, dest=id2, w=weight)]
+        self.EdgesIn[id2] = self.EdgesIn.get(id2, []) + [CEdge(src=id2, dest=id1, w=weight)]
 
     def remove_node(self, node_id: int) -> bool:
         pass
@@ -38,5 +38,5 @@ class DiGraph(GraphInterface):
         pass
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
-        self.Nodes[node_id] = NodeV(id=node_id, pos=pos)
+        self.Nodes[node_id] = CNode(id=node_id, pos=pos)
         return True

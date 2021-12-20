@@ -1,4 +1,4 @@
-class NodeV:
+class CNode:
 
     def __init__(self, pos=None, id=None, info=None, previous=None, length=None):
         self.pos = pos
