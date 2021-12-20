@@ -58,7 +58,8 @@ class DiGraph(GraphInterface):
         return False
                     
     def remove_node(self, node_id: int) -> bool:
-        pass
+        del self.Nodes[node_id]
+        # Todo remove also the edges conncted 
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """
