@@ -36,5 +36,5 @@ class GraphAlgo(GraphAlgoInterface):
 
 if __name__ == '__main__':
     ga = GraphAlgo()
-    ga.load_from_json("C:\\Users\\dolev\\Desktop\\ex3oop\\Ex3\\data\\A0.json")
+    ga.load_from_json("../../data/A0.json")
     a = 5
