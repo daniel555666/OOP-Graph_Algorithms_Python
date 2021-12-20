@@ -22,3 +22,12 @@ class TestDiGraph(TestCase):
 
     def test_add_node(self):
         self.fail()
+
+    def test_get_all_v(self):
+        self.fail()
+
+    def test_all_in_edges_of_node(self):
+        self.fail()
+
+    def test_all_out_edges_of_node(self):
+        self.fail()

@@ -59,7 +59,8 @@ class DiGraph(GraphInterface):
                     
     def remove_node(self, node_id: int) -> bool:
         del self.Nodes[node_id]
-        # Todo remove also the edges conncted 
+        # Todo remove also the edges conncted
+        # Todo
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """
@@ -72,6 +73,7 @@ class DiGraph(GraphInterface):
         """
         if f"{node_id1}_{node_id2}" in self.Edges:
             del self.Edges[f"{node_id1}_{node_id2}"]
+            # Todo
             # TODO need to fix because it will delete all the in and out edges instead of just 1
             del self.EdgesOut[node_id1]
             del self.EdgesIn[node_id2]
@@ -90,3 +92,25 @@ class DiGraph(GraphInterface):
             self.Nodes[node_id] = CNode(id=node_id, pos=pos)
             return True
         return False
+
+    def get_all_v(self) -> dict:
+        """return a dictionary of all the nodes in the Graph, each node is represented using a pair
+         (node_id, node_data)
+        """
+        # TODO
+        pass
+
+    def all_in_edges_of_node(self, id1: int) -> dict:
+        """return a dictionary of all the nodes connected to (into) node_id ,
+        each node is represented using a pair (other_node_id, weight)
+         """
+        # Todo
+        pass
+
+    def all_out_edges_of_node(self, id1: int) -> dict:
+        """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
+        (other_node_id, weight)
+        """
+        # Todo
+        pass
+
