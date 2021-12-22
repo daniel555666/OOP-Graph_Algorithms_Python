@@ -17,8 +17,8 @@ class DiGraph(GraphInterface):
         else:
             self.Edges = Edges
             for e in self.Edges:
-                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], []) + [CEdge(src=e["src"], dest=e["dest"], w=e["w"])]
-                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], []) + [CEdge(src=e["dest"], dest=e["src"], w=e["w"])]
+                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], []) + [{e["dest"]: e["w"]}]
+                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], []) + [{e["src"]:  e["w"]}]
 
     def v_size(self) -> int:
         """
@@ -97,20 +97,18 @@ class DiGraph(GraphInterface):
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair
          (node_id, node_data)
         """
-        # TODO
-        pass
+        return self.Nodes
 
     def all_in_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected to (into) node_id ,
         each node is represented using a pair (other_node_id, weight)
          """
-        # Todo
-        pass
+        return self.EdgesIn
+
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
         (other_node_id, weight)
         """
-        # Todo
-        pass
+        return self.EdgesOut
 
