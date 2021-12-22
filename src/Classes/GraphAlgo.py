@@ -21,6 +21,19 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
+        graph = self.graph
+        q = PriorityQueue() # need to check if the q is - or +
+        for node in graph.Edges:
+            node.length = sys.maxsize
+            node.previous=None
+            q.put(node)
+        graph.Nodes.get(id1).length=0
+
+        while not q.empty():
+            current=q.get()
+            dictOfCurrent=graph.all_out_edges_of_node(current.id)
+            for TupleNode in dictOfCurrent.values():
+                if
 
 
 
