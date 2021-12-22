@@ -1,4 +1,7 @@
+import sys
+
 if __name__ == '__main__':
+    print(sys.maxsize)
     Nodes = {1, 2, 3, 4}
     EdgesIn = {
         1: {

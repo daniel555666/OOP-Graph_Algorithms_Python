@@ -52,27 +52,45 @@ class DiGraph(GraphInterface):
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         https://stackoverflow.com/questions/1781571/how-to-concatenate-two-dictionaries-to-create-a-new-one-in-python
         """
+        # dont know why this now working
+        # if id1 or id2 not in self.Nodes:
+        #     return False
+        if id2 == id1:
+            return False
+        if id1 not in self.Nodes:
+            return False
+        if id2 not in self.Nodes:
+            return False
         if f"{id1}_{id2}" not in self.Edges:
             self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
-            self.EdgesOut[id1].update({id2: (id2, weight)})
             self.EdgesIn[id2].update({id1: (id1, weight)})
+            self.EdgesOut[id1].update({id2: (id2, weight)})
             self.MC = self.MC + 1
             return True
         return False
 
     def remove_node(self, node_id: int) -> bool:
         """
+        Removes a node from the graph.
+        @param node_id: The node ID
+        @return: True if the node was removed successfully, False o.w.
+        Note: if the node id does not exists the function will do nothing
         https://stackoverflow.com/questions/5384914/how-to-delete-items-from-a-dictionary-while-iterating-over-it
         """
         if node_id in self.Nodes:
             del self.Nodes[node_id]
             del self.EdgesOut[node_id]
             del self.EdgesIn[node_id]
-            for edge in list(self.Edges.keys()):
-                if edge.src == node_id:
-                    del self.Edges[f"{edge.src}_{edge.dest}"]
-                if edge.dest == node_id:
-                    del self.Edges[f"{edge.src}_{edge.dest}"]
+            for key in list(self.Edges.keys()):
+                src_key = int(key.split("_")[0])
+                dest_key = int(key.split("_")[1])
+                if src_key == node_id:
+                    del self.Edges[f"{src_key}_{dest_key}"]
+                    del self.EdgesIn[dest_key][src_key]
+                    del self.EdgesOut[dest_key][src_key]
+
+                if dest_key == node_id:
+                    del self.Edges[f"{src_key}_{dest_key}"]
             self.MC = self.MC + 1
             return True
         return False
@@ -86,6 +104,12 @@ class DiGraph(GraphInterface):
         Note: If such an edge does not exists the function will do nothing
         https://stackoverflow.com/questions/11277432/how-can-i-remove-a-key-from-a-python-dictionary
         """
+        if node_id2 == node_id1:
+            return False
+        if node_id1 not in self.Nodes:
+            return False
+        if node_id2 not in self.Nodes:
+            return False
         if f"{node_id1}_{node_id2}" in self.Edges:
             del self.Edges[f"{node_id1}_{node_id2}"]
             del self.EdgesOut[node_id1][node_id2]
@@ -103,7 +127,7 @@ class DiGraph(GraphInterface):
         Note: if the node id already exists the node will not be added
         """
         if node_id not in self.Nodes:
-            self.Nodes[node_id] = CNode(id=node_id, pos=pos)
+            self.Nodes[node_id] = CNode(node_id_paramter=node_id, pos=pos)
             self.EdgesOut[node_id] = {}
             self.EdgesIn[node_id] = {}
             self.MC = self.MC + 1
@@ -127,3 +151,9 @@ class DiGraph(GraphInterface):
         (other_node_id, weight)
         """
         return self.EdgesOut.get(id1)
+
+    def __str__(self) -> str:
+        return f"""DiGraph(Edges= {self.Edges},EdgesIn={self.EdgesIn} ,EdgesOut={self.EdgesOut},MC={self.MC}) """
+
+    def __repr__(self) -> str:
+        return f"""DiGraph(Edges= {self.Edges},EdgesIn={self.EdgesIn} ,EdgesOut={self.EdgesOut},MC={self.MC}) """
