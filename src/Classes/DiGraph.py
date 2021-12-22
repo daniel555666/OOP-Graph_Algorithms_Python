@@ -54,15 +54,28 @@ class DiGraph(GraphInterface):
         """
         if f"{id1}_{id2}" not in self.Edges:
             self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
-            # self.EdgesOut[id1] = {id2: weight}
             self.EdgesOut[id1].update({id2: weight})
-            # self.EdgesIn[id2] = {id1: weight}
             self.EdgesIn[id2].update({id1: weight})
+            self.MC = self.MC + 1
             return True
         return False
-                    
+
     def remove_node(self, node_id: int) -> bool:
-        del self.Nodes[node_id]
+        """
+        https://stackoverflow.com/questions/5384914/how-to-delete-items-from-a-dictionary-while-iterating-over-it
+        """
+        if node_id in self.Nodes:
+            del self.Nodes[node_id]
+            del self.EdgesOut[node_id]
+            del self.EdgesIn[node_id]
+            for edge in list(self.Edges.keys()):
+                if edge.src == node_id:
+                    del self.Edges[f"{edge.src}_{edge.dest}"]
+                if edge.dest == node_id:
+                    del self.Edges[f"{edge.src}_{edge.dest}"]
+            self.MC = self.MC + 1
+            return True
+        return False
         # Todo remove also the edges conncted
         # Todo
 
@@ -77,10 +90,9 @@ class DiGraph(GraphInterface):
         """
         if f"{node_id1}_{node_id2}" in self.Edges:
             del self.Edges[f"{node_id1}_{node_id2}"]
-            # Todo
-            # TODO need to fix because it will delete all the in and out edges instead of just 1
-            del self.EdgesOut[node_id1]
-            del self.EdgesIn[node_id2]
+            del self.EdgesOut[node_id1][node_id2]
+            del self.EdgesIn[node_id2][node_id1]
+            self.MC = self.MC + 1
             return True
         return False
 
@@ -96,6 +108,7 @@ class DiGraph(GraphInterface):
             self.Nodes[node_id] = CNode(id=node_id, pos=pos)
             self.EdgesOut[node_id] = {}
             self.EdgesIn[node_id] = {}
+            self.MC = self.MC + 1
             return True
         return False
 
