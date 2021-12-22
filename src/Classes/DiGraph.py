@@ -17,8 +17,8 @@ class DiGraph(GraphInterface):
         else:
             self.Edges = Edges
             for e in self.Edges:
-                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], []) + [CEdge(src=e["src"], dest=e["dest"], w=e["w"])]
-                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], []) + [CEdge(src=e["dest"], dest=e["src"], w=e["w"])]
+                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], []) + [{e["dest"]: e["w"]}]
+                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], []) + [{e["src"]:  e["w"]}]
 
     def v_size(self) -> int:
         """
