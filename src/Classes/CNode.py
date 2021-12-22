@@ -1,7 +1,9 @@
 class CNode:
 
-    def __init__(self, pos=None, id=None, info="white", previous=None, length=None, rank=0):
-        self.pos = pos
+    def __init__(self, pos:tuple =None, id :int =None, info :str ="white", previous =None, length=None, rank :int =0):
+        self.x = pos[0]
+        self.y = pos[1]
+        self.z = pos[2]
         self.id = id
         self.info = info
         self.previous = previous

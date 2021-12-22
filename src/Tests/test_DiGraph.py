@@ -1,4 +1,6 @@
 from unittest import TestCase
+from src.Classes.DiGraph import DiGraph
+from src.Classes.GraphAlgo import GraphAlgo
 
 
 class TestDiGraph(TestCase):
@@ -15,6 +17,10 @@ class TestDiGraph(TestCase):
         self.fail()
 
     def test_remove_node(self):
+        g = DiGraph()
+        ga = GraphAlgo()
+        ga.load_from_json("../../data/A0.json")
+        a = 5
         self.fail()
 
     def test_remove_edge(self):
@@ -27,7 +33,11 @@ class TestDiGraph(TestCase):
         self.fail()
 
     def test_all_in_edges_of_node(self):
-        self.fail()
+        ga = GraphAlgo()
+        ga.load_from_json("../../data/A0.json")
+        g = ga.get_graph()
+        print(g.all_in_edges_of_node(0))
+        a = 5
 
     def test_all_out_edges_of_node(self):
         self.fail()
