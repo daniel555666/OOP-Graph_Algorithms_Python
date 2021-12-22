@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 from src.Classes import SaveLoad
 from src.Classes.DiGraph import DiGraph
@@ -8,8 +9,8 @@ from src.interfaces.GraphInterface import GraphInterface
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, g=None):
-        self.g = DiGraph(g)
+    def __init__(self, graph=None):
+        self.graph = DiGraph(graph)
 
     def load_from_json(self, file_name: str) -> bool:
         self.g = SaveLoad.load(file_name)
@@ -26,6 +27,21 @@ class GraphAlgo(GraphAlgoInterface):
 
     def get_graph(self) -> GraphInterface:
         return self.g
+
+    def centerPoint(self) -> (int, float):
+        """
+        Finds the node that has the shortest distance to it's farthest node.
+        :return: The nodes id, min-maximum distance
+        """
+        # TODO
+
+    def TSP(self, node_lst: List[int]) -> (List[int], float):
+        """
+        Finds the shortest path that visits all the nodes in the list
+        :param node_lst: A list of nodes id's
+        :return: A list of the nodes id's in the path, and the overall distance
+        """
+        # TODO
 
 
 if __name__ == '__main__':
