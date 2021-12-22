@@ -4,6 +4,7 @@ from src.Classes.CNode import CNode
 
 
 class DiGraph(GraphInterface):
+
     def __init__(self, Nodes:dict =None, Edges:dict =None):
         self.EdgesOut = {}
         self.EdgesIn = {}
@@ -17,8 +18,8 @@ class DiGraph(GraphInterface):
         else:
             self.Edges = Edges
             for e in self.Edges:
-                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], []) + [{e["dest"]: e["w"]}]
-                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], []) + [{e["src"]:  e["w"]}]
+                self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], {}) + [{e["dest"]: e["w"]}]
+                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], {}) + [{e["src"]:  e["w"]}]
 
     def v_size(self) -> int:
         """
@@ -49,11 +50,14 @@ class DiGraph(GraphInterface):
         @param weight: The weight of the edge
         @return: True if the edge was added successfully, False o.w.
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
+        https://stackoverflow.com/questions/1781571/how-to-concatenate-two-dictionaries-to-create-a-new-one-in-python
         """
         if f"{id1}_{id2}" not in self.Edges:
             self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
-            self.EdgesOut[id1] = self.EdgesOut.get(id1, []) + [CEdge(src=id1, dest=id2, w=weight)]
-            self.EdgesIn[id2] = self.EdgesIn.get(id2, []) + [CEdge(src=id2, dest=id1, w=weight)]
+            # self.EdgesOut[id1] = {id2: weight}
+            self.EdgesOut[id1].update({id2: weight})
+            # self.EdgesIn[id2] = {id1: weight}
+            self.EdgesIn[id2].update({id1: weight})
             return True
         return False
                     
@@ -90,6 +94,8 @@ class DiGraph(GraphInterface):
         """
         if node_id not in self.Nodes:
             self.Nodes[node_id] = CNode(id=node_id, pos=pos)
+            self.EdgesOut[node_id] = {}
+            self.EdgesIn[node_id] = {}
             return True
         return False
 
@@ -103,12 +109,12 @@ class DiGraph(GraphInterface):
         """return a dictionary of all the nodes connected to (into) node_id ,
         each node is represented using a pair (other_node_id, weight)
          """
-        return self.EdgesIn
+        return self.EdgesIn[id1]
 
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
         (other_node_id, weight)
         """
-        return self.EdgesOut
+        return self.EdgesOut.get(id1)
 

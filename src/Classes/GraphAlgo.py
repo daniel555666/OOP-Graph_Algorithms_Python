@@ -27,4 +27,5 @@ class GraphAlgo(GraphAlgoInterface):
 if __name__ == '__main__':
     ga = GraphAlgo()
     ga.load_from_json("../../data/A0.json")
+    ga.g.all_in_edges_of_node(1)
     a = 5
