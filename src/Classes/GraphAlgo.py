@@ -3,7 +3,7 @@ import json
 from src.Classes import SaveLoad
 from src.Classes.DiGraph import DiGraph
 from src.interfaces.GraphAlgoInterface import GraphAlgoInterface
-
+from src.interfaces.GraphInterface import GraphInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -13,6 +13,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     def load_from_json(self, file_name: str) -> bool:
         self.g = SaveLoad.load(file_name)
+        a = 5
 
     def save_to_json(self, file_name: str) -> bool:
         pass
@@ -22,6 +23,9 @@ class GraphAlgo(GraphAlgoInterface):
 
     def plot_graph(self) -> None:
         pass
+
+    def get_graph(self) -> GraphInterface:
+        return self.g
 
 
 if __name__ == '__main__':

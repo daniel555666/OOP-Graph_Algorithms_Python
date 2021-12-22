@@ -5,33 +5,33 @@ from src.Classes.CNode import CNode
 
 class DiGraph(GraphInterface):
 
-    def __init__(self, Nodes:dict =None, Edges:dict =None):
+    def __init__(self, Nodes: dict = None, Edges: dict = None, graph=None):
         self.EdgesOut = {}
         self.EdgesIn = {}
         self.MC = 0
-        if(Nodes == None):
+        if (Nodes == None):
             self.Nodes = {}
         else:
             self.Nodes = Nodes
-        if(Edges == None):
+        if (Edges == None):
             self.Edges = {}
         else:
             self.Edges = Edges
             for e in self.Edges:
                 self.EdgesIn[e["src"]] = self.EdgesIn.get(e["src"], {}) + [{e["dest"]: e["w"]}]
-                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], {}) + [{e["src"]:  e["w"]}]
+                self.EdgesOut[e["dest"]] = self.EdgesOut.get(e["dest"], {}) + [{e["src"]: e["w"]}]
 
     def v_size(self) -> int:
         """
         @return: The number of vertices in this graph
-        """        
+        """
         return len(self.Nodes)
 
     def e_size(self) -> int:
         """
         Returns the number of edges in this graph
         @return: The number of edges in this graph
-        """        
+        """
         return len(self.Edges)
 
     def get_mc(self) -> int:
@@ -39,7 +39,7 @@ class DiGraph(GraphInterface):
         Returns the current version of this graph,
         on every change in the graph state - the MC should be increased
         @return: The current version of this graph.
-        """        
+        """
         return self.MC
 
     def add_edge(self, id1: int, id2: int, weight: float) -> bool:
@@ -54,8 +54,8 @@ class DiGraph(GraphInterface):
         """
         if f"{id1}_{id2}" not in self.Edges:
             self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
-            self.EdgesOut[id1].update({id2: weight})
-            self.EdgesIn[id2].update({id1: weight})
+            self.EdgesOut[id1].update({id2: (id2, weight)})
+            self.EdgesIn[id2].update({id1: (id1, weight)})
             self.MC = self.MC + 1
             return True
         return False
@@ -76,8 +76,6 @@ class DiGraph(GraphInterface):
             self.MC = self.MC + 1
             return True
         return False
-        # Todo remove also the edges conncted
-        # Todo
 
     def remove_edge(self, node_id1: int, node_id2: int) -> bool:
         """
@@ -124,10 +122,8 @@ class DiGraph(GraphInterface):
          """
         return self.EdgesIn[id1]
 
-
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair
         (other_node_id, weight)
         """
         return self.EdgesOut.get(id1)
-
