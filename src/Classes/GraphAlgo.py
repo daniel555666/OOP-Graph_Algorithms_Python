@@ -13,8 +13,7 @@ class GraphAlgo(GraphAlgoInterface):
         self.graph = DiGraph(graph)
 
     def load_from_json(self, file_name: str) -> bool:
-        self.g = SaveLoad.load(file_name)
-        a = 5
+        self.graph = SaveLoad.load(file_name)
 
     def save_to_json(self, file_name: str) -> bool:
         pass
@@ -26,7 +25,7 @@ class GraphAlgo(GraphAlgoInterface):
         pass
 
     def get_graph(self) -> GraphInterface:
-        return self.g
+        return self.graph
 
     def centerPoint(self) -> (int, float):
         """
@@ -47,5 +46,5 @@ class GraphAlgo(GraphAlgoInterface):
 if __name__ == '__main__':
     ga = GraphAlgo()
     ga.load_from_json("../../data/A0.json")
-    ga.g.all_in_edges_of_node(1)
+    ga.graph.all_in_edges_of_node(1)
     a = 5

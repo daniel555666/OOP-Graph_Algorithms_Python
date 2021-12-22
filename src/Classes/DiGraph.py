@@ -54,8 +54,8 @@ class DiGraph(GraphInterface):
         """
         if f"{id1}_{id2}" not in self.Edges:
             self.Edges[f"{id1}_{id2}"] = CEdge(src=id1, dest=id2, w=weight)
-            self.EdgesOut[id1].update({id2: (id2, weight)})
             self.EdgesIn[id2].update({id1: (id1, weight)})
+            self.EdgesOut[id1].update({id2: (id2, weight)})
             self.MC = self.MC + 1
             return True
         return False
@@ -68,11 +68,16 @@ class DiGraph(GraphInterface):
             del self.Nodes[node_id]
             del self.EdgesOut[node_id]
             del self.EdgesIn[node_id]
-            for edge in list(self.Edges.keys()):
-                if edge.src == node_id:
-                    del self.Edges[f"{edge.src}_{edge.dest}"]
-                if edge.dest == node_id:
-                    del self.Edges[f"{edge.src}_{edge.dest}"]
+            for key in list(self.Edges.keys()):
+                src_key = int(key.split("_")[0])
+                dest_key = int(key.split("_")[1])
+                if src_key == node_id:
+                    del self.Edges[f"{src_key}_{dest_key}"]
+                    del self.EdgesIn[dest_key][src_key]
+                    del self.EdgesOut[dest_key][src_key]
+
+                if dest_key == node_id:
+                    del self.Edges[f"{src_key}_{dest_key}"]
             self.MC = self.MC + 1
             return True
         return False
@@ -127,3 +132,9 @@ class DiGraph(GraphInterface):
         (other_node_id, weight)
         """
         return self.EdgesOut.get(id1)
+
+    def __str__(self) -> str:
+        return f"""DiGraph(Edges= {self.Edges},EdgesIn={self.EdgesIn} ,EdgesOut={self.EdgesOut},MC={self.MC}) """
+
+    def __repr__(self) -> str:
+        return f"""DiGraph(Edges= {self.Edges},EdgesIn={self.EdgesIn} ,EdgesOut={self.EdgesOut},MC={self.MC}) """
