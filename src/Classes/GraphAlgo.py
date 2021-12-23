@@ -1,7 +1,9 @@
 import heapq
 import json
+
 import sys
 from queue import PriorityQueue
+
 from typing import List
 
 from src.Classes import SaveLoad
@@ -60,6 +62,7 @@ class GraphAlgo(GraphAlgoInterface):
     def get_graph(self) -> GraphInterface:
         return self.graph
 
+
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         listSave=[]
         distance=0
@@ -104,3 +107,4 @@ if __name__ == '__main__':
     d=ga.centerPoint()
     print(d)
 
+    
