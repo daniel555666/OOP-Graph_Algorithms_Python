@@ -9,3 +9,6 @@ class CNode:
         self.previous = previous
         self.length = length
         self.rank = rank
+
+    def __lt__(self, other):
+        return self.length<other.length
