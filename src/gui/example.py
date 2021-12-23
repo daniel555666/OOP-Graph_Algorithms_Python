@@ -2,7 +2,7 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-#https://colab.research.google.com/github/makeabilitylab/signals/blob/master/Tutorials/IntroToMatplotlib.ipynb#scrollTo=DZBaqyORpHIS
+# https://colab.research.google.com/github/makeabilitylab/signals/blob/master/Tutorials/IntroToMatplotlib.ipynb#scrollTo=DZBaqyORpHIS
 
 import random
 import matplotlib.pyplot as plt
