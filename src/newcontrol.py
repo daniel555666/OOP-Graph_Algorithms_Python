@@ -8,22 +8,35 @@ from src.Classes.GraphAlgo import GraphAlgo
 g = DiGraph()
 ga = GraphAlgo()
 
-#https://www.programcreek.com/python/?CodeExample=draw+arrow
-def DrawArrow(x, y, angle=0):
-    def rotate(pos, angle):
-        cen = (5 + x, 0 + y)
-        angle *= -(math.pi / 180)
-        cos_theta = math.cos(angle)
-        sin_theta = math.sin(angle)
-        ret = ((cos_theta * (pos[0] - cen[0]) - sin_theta * (pos[1] - cen[1])) + cen[0],
-               (sin_theta * (pos[0] - cen[0]) + cos_theta * (pos[1] - cen[1])) + cen[1])
-        return ret
 
-    p0 = rotate((0 + x, -4 + y), angle + 90)
-    p1 = rotate((0 + x, 4 + y), angle + 90)
-    p2 = rotate((10 + x, 0 + y), angle + 90)
-    return [p0,p1,p2]
-    #pygame.draw.polygon(self.screen, color, [p0, p1, p2])
+# def DrawArrow(x1: int, y1: int, x2: int, y2: int):
+#     dx = x2 - x1 + 5
+#     dy = y2 - y1
+#     angle = math.atan2(dy, dx)
+#
+#     len = int(math.sqrt(dx * dx + dy * dy))
+
+
+#https://www.programcreek.com/python/?CodeExample=draw+arrow
+def DrawArrow(x1,y1,x2,y2,size,widtha=5):
+    dx = float(x2-x1)
+    dy = float(y2-y1)
+    D = float(math.sqrt(dx * dx + dy * dy))
+    xm = float(D - size)
+    xn = float(xm)
+    ym = float(widtha)
+    yn = -widtha
+    sin = dy / D
+    cos = dx / D
+    x = xm * cos - ym * sin + x1
+    ym = xm * sin + ym * cos + y1
+    xm = x
+    x = xn * cos - yn * sin + x1
+    yn = xn * sin + yn * cos + y1
+    xn = x
+    return [(x2,y2),  (int(xm),  int(ym)),  (int(xn), int(yn))]
+
+
 
 
 def GUI(file_name):
@@ -45,6 +58,7 @@ def GUI(file_name):
     # for edge in g.():
     #     #TODO
     #     pass
+
     incrementY = 50
     incrementX = 50
     minX = 100000000
@@ -73,22 +87,37 @@ def GUI(file_name):
         y1 = incrementY + (g.get_all_v().get(edge.src).y-minY)*factorY
         x2 = incrementX + (g.get_all_v().get(edge.dest).x-minX)*factorX
         y2 = incrementY + (g.get_all_v().get(edge.dest).y-minY)*factorY
+        if x1 > x2 :
+            y1 = y1 - 5
+            y2 = y2 - 5
+        else:
+            y1 = y1 + 5;
+            y2 = y2 + 5;
         src_edge_list.append([x1,y1])
         dest_edge_list.append([x2,y2])
-        arrow_head_list.append(DrawArrow(x2,y2))
+        arrow_head_list.append(DrawArrow(x1,y1,x2,y2,25))
 
     clock = pygame.time.Clock()
+    pygame.font.init()
+    myfont = pygame.font.SysFont('Comic Sans MS', 20)
+
+
     done = False
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
         window.fill(white)
-        for vert in node_list:
-            pygame.draw.circle(window, black, vert, 2)
+
         for edge in range(len(src_edge_list)):
             pygame.draw.line(window,black ,src_edge_list[edge], dest_edge_list[edge])
-            # pygame.draw.polygon(window,black,(src_edge_list[edge][0],src_edge_list[edge][1]),(dest_edge_list[edge][0],dest_edge_list[edge][1]))
+            pygame.draw.polygon(window,[255,0,0],arrow_head_list[edge])
+        i =0
+        for nodeV in node_list:
+            pygame.draw.circle(window, black, nodeV, 10)
+            textsurface = myfont.render(f"{i}", False, white)
+            i += 1
+            window.blit(textsurface,(nodeV[0]-7,nodeV[1]-5))
         pygame.display.flip()
         clock.tick(20)
     pygame.quit()
