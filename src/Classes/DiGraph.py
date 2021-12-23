@@ -1,3 +1,5 @@
+import random
+
 from src.Classes.CEdge import CEdge
 from src.interfaces.GraphInterface import GraphInterface
 from src.Classes.CNode import CNode
@@ -126,6 +128,16 @@ class DiGraph(GraphInterface):
         @return: True if the node was added successfully, False o.w.
         Note: if the node id already exists the node will not be added
         """
+        NODEMAXVALUEX = 35.5
+        NODEMAXVALUEY = 32.5
+        NODEMINVALUEY = 32.0
+        NODEMINVALUEX = 35.0
+
+        if pos == None:
+            x = random.uniform(NODEMINVALUEX, NODEMAXVALUEX)
+            y = random.uniform(NODEMINVALUEY, NODEMAXVALUEY)
+            pos = (x, y, 0.0)
+
         if node_id not in self.Nodes:
             self.Nodes[node_id] = CNode(node_id_paramter=node_id, pos=pos)
             self.EdgesOut[node_id] = {}
