@@ -115,18 +115,21 @@ def GUI(file_name):
                         src.gui.constants.user_text_tsp = ''
                     else:
                         active_tsp = False
+                        src.gui.constants.user_text_tsp = 'tsp'
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_shortest.collidepoint(event.pos):
                         active_shortest = True
                         src.gui.constants.user_text_shortest = ''
                     else:
                         active_shortest = False
+                        src.gui.constants.user_text_shortest = 'shortest'
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_add_node.collidepoint(event.pos):
                         active_add_node = True
                         src.gui.constants.user_text_add_node = ''
                     else:
                         active_add_node = False
+                        src.gui.constants.user_text_add_node = 'add node'
                         
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_remove_node.collidepoint(event.pos):
@@ -134,6 +137,8 @@ def GUI(file_name):
                         src.gui.constants.user_text_remove_node = ''
                     else:
                         active_remove_node = False
+                        src.gui.constants.user_text_remove_node = 'remove node'
+
 
         window.fill(white)
 
