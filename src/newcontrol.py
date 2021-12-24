@@ -5,7 +5,8 @@ from src.gui.Button import Button
 import src.gui.constants
 from src.gui.algo_func import tsp_ga, center_ga, reset_center, reset_tsp, shortest_ga, reset_shortest, \
     reset_shortest_string, reset_tsp_string
-from src.gui.graph_func import add_node_g, reset_add_node_string, remove_node_g, reset_remove_node_string
+from src.gui.graph_func import add_node_g, reset_add_node_string, remove_node_g, reset_remove_node_string, \
+    remove_edge_g, reset_remove_edge_string
 
 
 def GUI(file_name):
@@ -45,6 +46,12 @@ def GUI(file_name):
     color_active_remove_node = (102, 51, 153)
     color_passive_remove_node = (216, 191, 216)
     active_remove_node = False
+
+    base_font_remove_edge = pygame.font.Font(None, 20)
+    input_rect_remove_edge = pygame.Rect(180, 22, 140, 20)
+    color_active_remove_edge = (102, 51, 153)
+    color_passive_remove_edge = (216, 191, 216)
+    active_remove_edge = False
 
 
     done = False
@@ -103,6 +110,19 @@ def GUI(file_name):
                         pygame.display.flip()
                     else:
                         src.gui.constants.user_text_remove_node += event.unicode
+                        
+                if active_remove_edge == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        src.gui.constants.user_text_remove_edge = src.gui.constants.user_text_remove_edge[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        cost = remove_edge_g(src.gui.constants.user_text_remove_edge)
+                        src.gui.constants.user_text_remove_edge = str(cost)
+                        timeout = Timer(2.0, reset_remove_edge_string)
+                        timeout.start()
+                        active_remove_edge = False
+                        pygame.display.flip()
+                    else:
+                        src.gui.constants.user_text_remove_edge += event.unicode
 
 
 
@@ -138,6 +158,14 @@ def GUI(file_name):
                     else:
                         active_remove_node = False
                         src.gui.constants.user_text_remove_node = 'remove node'
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_remove_edge.collidepoint(event.pos):
+                        active_remove_edge = True
+                        src.gui.constants.user_text_remove_edge = ''
+                    else:
+                        active_remove_edge = False
+                        src.gui.constants.user_text_remove_edge = 'remove edge'
 
 
         window.fill(white)
@@ -210,6 +238,15 @@ def GUI(file_name):
         text_surface = base_font_remove_node.render(src.gui.constants.user_text_remove_node, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_remove_node.x + 5, input_rect_remove_node.y + 5))
         input_rect_remove_node.w = max(text_surface.get_width() + 10, 73)
+
+        if active_remove_edge:
+            color_remove_edge = color_active_remove_edge
+        else:
+            color_remove_edge = color_passive_remove_edge
+        pygame.draw.rect(window, color_remove_edge, input_rect_remove_edge, 2)
+        text_surface = base_font_remove_edge.render(src.gui.constants.user_text_remove_edge, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_remove_edge.x + 5, input_rect_remove_edge.y + 5))
+        input_rect_remove_edge.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         pygame.display.flip()

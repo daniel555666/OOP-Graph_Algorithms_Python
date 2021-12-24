@@ -8,6 +8,9 @@ def reset_add_node_string():
 def reset_remove_node_string():
     src.gui.constants.user_text_remove_node = 'remove node'
 
+def reset_remove_edge_string():
+    src.gui.constants.user_text_remove_edge = 'remove edge'
+
 
 def add_node_g(user_text_add_node):
     split_str = user_text_add_node.split(",")
@@ -32,6 +35,21 @@ def remove_node_g(user_text_remove_node):
     if input_str.isnumeric():
         node_id = int(input_str)
         value = src.gui.constants.ga.get_graph().remove_node(node_id)
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
+        return value
+    else:
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
+        return False
+
+
+def remove_edge_g(user_text_remove_edge):
+    input_str = user_text_remove_edge.split(",")
+    if len(input_str) == 2:
+        src_id = int(input_str[0])
+        dest_id = int(input_str[1])
+        value = src.gui.constants.ga.get_graph().remove_edge(src_id, dest_id)
         src.gui.constants.getminmax()
         src.gui.constants.calculate_values()
         return value
