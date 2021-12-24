@@ -9,6 +9,7 @@ user_text_tsp = 'tsp'
 user_text_add_node = 'add node'
 user_text_remove_node = 'remove node'
 user_text_remove_edge = 'remove edge'
+user_text_add_edge = 'add edge'
 
 shortest_list = None
 tsp_list = None

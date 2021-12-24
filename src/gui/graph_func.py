@@ -11,6 +11,8 @@ def reset_remove_node_string():
 def reset_remove_edge_string():
     src.gui.constants.user_text_remove_edge = 'remove edge'
 
+def reset_add_edge_string():
+    src.gui.constants.user_text_add_edge = 'add edge'
 
 def add_node_g(user_text_add_node):
     split_str = user_text_add_node.split(",")
@@ -57,3 +59,19 @@ def remove_edge_g(user_text_remove_edge):
         src.gui.constants.getminmax()
         src.gui.constants.calculate_values()
         return False
+
+def add_edge_g(user_text_add_edge):
+    input_str = user_text_add_edge.split(",")
+    if len(input_str) == 3:
+        src_id = int(input_str[0])
+        dest_id = int(input_str[1])
+        weight = float(input_str[2])
+        value = src.gui.constants.ga.get_graph().add_edge(src_id,dest_id,weight)
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
+        return value
+    else:
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
+        return False
+    
