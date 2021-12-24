@@ -66,6 +66,13 @@ def GUI(file_name):
     active_node_loc = False
     node_loc_font = pygame.font.Font(None, 20)
 
+    base_font_edge_weight = pygame.font.Font(None, 20)
+    input_rect_edge_weight = pygame.Rect(280, 22, 140, 20)
+    color_active_edge_weight = (102, 51, 153)
+    color_passive_edge_weight = (216, 191, 216)
+    active_edge_weight = False
+    edge_weight_font = pygame.font.Font(None, 20)
+
     done = False
     while not done:
         for event in pygame.event.get():
@@ -201,17 +208,33 @@ def GUI(file_name):
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_node_loc.collidepoint(event.pos):
                         active_node_loc = not active_node_loc
-                        if  active_node_loc is False:
+                        if active_node_loc is False:
                             src.gui.constants.user_text_node_loc = 'hide location'
                         else:
                             src.gui.constants.user_text_node_loc = 'show location'
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_edge_weight.collidepoint(event.pos):
+                        active_edge_weight = not active_edge_weight
+                        if active_edge_weight is False:
+                            src.gui.constants.user_text_edge_weight = 'hide weight'
+                        else:
+                            src.gui.constants.user_text_edge_weight = 'show weight'
+
         window.fill(white)
 
-        for edge in range(len(src.gui.constants.src_edge_list)):
-            pygame.draw.line(window, black, src.gui.constants.src_edge_list[edge],
-                             src.gui.constants.dest_edge_list[edge])
-            pygame.draw.polygon(window, [46, 139, 87], src.gui.constants.arrow_head_list[edge])
+        for ind in range(len(src.gui.constants.src_edge_list)):
+            src_list = src.gui.constants.src_edge_list[ind]
+            dest_list = src.gui.constants.dest_edge_list[ind]
+            pygame.draw.line(window, black, [src_list[0], src_list[1]],
+                             [dest_list[0], dest_list[1]])
+            pygame.draw.polygon(window, [46, 139, 87], src.gui.constants.arrow_head_list[ind])
+            if active_edge_weight is True:
+                weight_str = "{:.2f}".format(src_list[2])
+                x_pos = (src_list[0] + dest_list[0]) / 2
+                y_pos = (src_list[1] + dest_list[1]) / 2
+                edge_weight_surface = edge_weight_font.render(f"{weight_str}", True, black)
+                window.blit(edge_weight_surface, (x_pos - 25, y_pos - 25))
 
         for nodeV in src.gui.constants.node_list:
             pygame.draw.circle(window, black, [nodeV[0], nodeV[1]], 10)
@@ -312,6 +335,15 @@ def GUI(file_name):
         text_surface = base_font_node_loc.render(src.gui.constants.user_text_node_loc, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_node_loc.x + 5, input_rect_node_loc.y + 5))
         input_rect_node_loc.w = max(text_surface.get_width() + 10, 73)
+
+        if active_edge_weight:
+            color_edge_weight = color_passive_edge_weight
+        else:
+            color_edge_weight = color_active_edge_weight
+        pygame.draw.rect(window, color_edge_weight, input_rect_edge_weight, 2)
+        text_surface = base_font_edge_weight.render(src.gui.constants.user_text_edge_weight, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_edge_weight.x + 5, input_rect_edge_weight.y + 5))
+        input_rect_edge_weight.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         pygame.display.flip()
