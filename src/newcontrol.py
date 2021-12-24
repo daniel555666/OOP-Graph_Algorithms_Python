@@ -5,6 +5,7 @@ from src.gui.Button import Button
 import src.gui.constants
 from src.gui.algo_func import tsp_ga, center_ga, reset_center, reset_tsp, shortest_ga, reset_shortest, \
     reset_shortest_string, reset_tsp_string
+from src.gui.graph_func import add_node_g, reset_add_node_string
 
 
 def GUI(file_name):
@@ -12,7 +13,7 @@ def GUI(file_name):
     pygame.init()
     black = [0, 0, 0]
     white = [255, 255, 255]
-    size = [src.gui.constants.width,src.gui.constants.height]
+    size = [src.gui.constants.width, src.gui.constants.height]
     window = pygame.display.set_mode(size)
     center_button = Button((150, 20, 30), 2, 2, 70, 20, 'center')
     pygame.display.set_caption("EX3 Dolev Daniel Yakov")
@@ -32,6 +33,12 @@ def GUI(file_name):
     color_active_shortest = (102, 51, 153)
     color_passive_shortest = (216, 191, 216)
     active_shortest = False
+
+    base_font_add_node = pygame.font.Font(None, 20)
+    input_rect_add_node = pygame.Rect(80, 2, 140, 20)
+    color_active_add_node = (102, 51, 153)
+    color_passive_add_node = (216, 191, 216)
+    active_add_node = False
 
     done = False
     while not done:
@@ -64,6 +71,21 @@ def GUI(file_name):
                     else:
                         src.gui.constants.user_text_shortest += event.unicode
 
+                if active_add_node == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        src.gui.constants.user_text_add_node = src.gui.constants.user_text_add_node[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        cost = add_node_g(src.gui.constants.user_text_add_node)
+                        src.gui.constants.user_text_add_node = str(cost)
+                        timeout = Timer(5.0, reset_add_node_string)
+                        timeout.start()
+                        active_add_node = False
+                        pygame.display.flip()
+                    else:
+                        src.gui.constants.user_text_add_node += event.unicode
+
+
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
@@ -79,6 +101,12 @@ def GUI(file_name):
                         src.gui.constants.user_text_shortest = ''
                     else:
                         active_shortest = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_add_node.collidepoint(event.pos):
+                        active_add_node = True
+                        src.gui.constants.user_text_add_node = ''
+                    else:
+                        active_add_node = False
 
         window.fill(white)
 
@@ -123,7 +151,7 @@ def GUI(file_name):
         text_surface = base_font_tsp.render(src.gui.constants.user_text_tsp, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_tsp.x + 5, input_rect_tsp.y + 5))
         input_rect_tsp.w = max(text_surface.get_width() + 10, 73)
-        
+
         if active_shortest:
             color_shortest = color_active_shortest
         else:
@@ -133,6 +161,15 @@ def GUI(file_name):
         window.blit(text_surface, (input_rect_shortest.x + 5, input_rect_shortest.y + 5))
         input_rect_shortest.w = max(text_surface.get_width() + 10, 73)
 
+        if active_add_node:
+            color_add_node = color_active_add_node
+        else:
+            color_add_node = color_passive_add_node
+        pygame.draw.rect(window, color_add_node, input_rect_add_node, 2)
+        text_surface = base_font_add_node.render(src.gui.constants.user_text_add_node, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_add_node.x + 5, input_rect_add_node.y + 5))
+        input_rect_add_node.w = max(text_surface.get_width() + 10, 73)
+
         center_button.draw(window)
         pygame.display.flip()
         clock.tick(20)
@@ -141,4 +178,4 @@ def GUI(file_name):
 
 
 if __name__ == '__main__':
-    GUI("./data/A5.json")
+    GUI("./data/T0.json")

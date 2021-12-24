@@ -9,12 +9,13 @@ def load(file_name):
     graph_dict = json.load(file)
     file.close()
     graph = DiGraph()
+
     for n in graph_dict["Nodes"]:
         if "pos" not in n:
-            NODEMAXVALUEX = 35.5
-            NODEMAXVALUEY = 32.5
-            NODEMINVALUEY = 32.0
-            NODEMINVALUEX = 35.0
+            NODEMAXVALUEX = 35.23
+            NODEMAXVALUEY = 32.2
+            NODEMINVALUEY = 32.101
+            NODEMINVALUEX = 35.177
             x = random.uniform(NODEMINVALUEX, NODEMAXVALUEX)
             y = random.uniform(NODEMINVALUEY, NODEMAXVALUEY)
             xyz = (x, y, 0.0)

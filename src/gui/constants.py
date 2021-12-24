@@ -6,6 +6,7 @@ ga = GraphAlgo()
 
 user_text_shortest = 'shortest'
 user_text_tsp = 'tsp'
+user_text_add_node = 'add node'
 
 shortest_list = None
 tsp_list = None
@@ -52,9 +53,14 @@ def getminmax():
 
     factorX = width / scaleX * 0.8
     factorY = height / scaleY * 0.8
+    return (maxX,maxY,minX,minY)
 
 def calculate_values():
     g = ga.get_graph()
+    node_list.clear()
+    src_edge_list.clear()
+    dest_edge_list.clear()
+    arrow_head_list.clear()
     for node in g.get_all_v().values():
         n_id = node.id
         x = (node.x - minX) * factorX + incrementX
