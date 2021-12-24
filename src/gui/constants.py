@@ -41,6 +41,14 @@ def getminmax():
     global scaleY
     global factorX
     global factorY
+    minX = 100000000
+    maxX = (-1) * 100000000
+    minY = 100000000
+    maxY = (-1) * 100000000
+    scaleX = 0
+    scaleY = 0
+    factorX = 0
+    factorY = 0
 
     for node in ga.graph.get_all_v().values():
         minX = min(minX, node.x)

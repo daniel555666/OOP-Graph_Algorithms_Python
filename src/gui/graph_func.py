@@ -36,4 +36,6 @@ def remove_node_g(user_text_remove_node):
         src.gui.constants.calculate_values()
         return value
     else:
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
         return False

@@ -214,4 +214,4 @@ def GUI(file_name):
 
 
 if __name__ == '__main__':
-    GUI("./data/T0.json")
+    GUI("./data/A2.json")
