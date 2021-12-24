@@ -1,10 +1,15 @@
 from src.Classes.DiGraph import DiGraph
 from src.Classes.GraphAlgo import GraphAlgo
+from src.gui.draw_arrow import draw_arrow
 
 ga = GraphAlgo()
 
+user_text_shortest = 'shortest'
+user_text_tsp = 'tsp'
+
+shortest_list = None
 tsp_list = None
-shortest_path_list = None
+
 
 width = 1200
 height = 700
@@ -19,6 +24,11 @@ scaleY = 0
 factorX = 0
 factorY = 0
 center_node = None
+
+node_list = []
+src_edge_list = []
+dest_edge_list = []
+arrow_head_list = []
 
 
 def getminmax():
@@ -42,3 +52,30 @@ def getminmax():
 
     factorX = width / scaleX * 0.8
     factorY = height / scaleY * 0.8
+
+def calculate_values():
+    g = ga.get_graph()
+    for node in g.get_all_v().values():
+        n_id = node.id
+        x = (node.x - minX) * factorX + incrementX
+        y = (node.y - minY) * factorY + incrementY
+        node_list.append([x, y, n_id])
+
+    for edge in ga.graph.Edges.values():
+        x1 = incrementX + (
+                g.get_all_v().get(edge.src).x - minX) * factorX
+        y1 = incrementY + (
+                g.get_all_v().get(edge.src).y - minY) * factorY
+        x2 = incrementX + (
+                g.get_all_v().get(edge.dest).x - minX) * factorX
+        y2 = incrementY + (
+                g.get_all_v().get(edge.dest).y - minY) * factorY
+        if x1 > x2:
+            y1 = y1 - 5
+            y2 = y2 - 5
+        else:
+            y1 = y1 + 5
+            y2 = y2 + 5
+        src_edge_list.append([x1, y1])
+        dest_edge_list.append([x2, y2])
+        arrow_head_list.append(draw_arrow(x1, y1, x2, y2))

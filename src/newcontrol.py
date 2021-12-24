@@ -1,124 +1,37 @@
-import math
 import sys
 from threading import Timer
 import pygame
-
-from src.Classes.DiGraph import DiGraph
-from src.Classes.GraphAlgo import GraphAlgo
 from src.gui.Button import Button
 import src.gui.constants
-
-
-# ga, minX, minY, factorX, incrementX, factorY, incrementY, getminmax
-
-def reset_center():
-    src.gui.constants.center_node = None
-
-def reset_tsp():
-    src.gui.constants.tsp_list = None
-
-
-def center_ga():
-    (center_n, a) = src.gui.constants.ga.centerPoint()
-    src.gui.constants.center_node = center_n
-
-
-def tsp_ga(user_text):
-    split_str = user_text.split(",")
-    node_id_list = []
-    for s in split_str:
-        node_id_list.append(int(s))
-    (tsp_l, a) = src.gui.constants.ga.TSP(node_id_list)
-    src.gui.constants.tsp_list = tsp_l
-    print(src.gui.constants.tsp_list)
-
-
-def draw_arrow(x1, y1, x2, y2, size=12, widtha=5):
-    """
-    make an arrow edge.
-    @param x1: node1.x
-    @param x2: node2.x
-    @param y1: node1.y
-    @param y2: node2.y
-    @param size: the size of the triangle
-    @param widtha: the width of the triangle
-    draw the arrow :)
-    """
-    y_diffrance = float(y2 - y1)
-    x_diffrance = float(x2 - x1)
-    distance_result = float(math.sqrt(x_diffrance * x_diffrance + y_diffrance * y_diffrance))
-    minimum_x_distance = float(distance_result - size)
-    node_minmimum = float(minimum_x_distance)
-    dest_y_min = float(widtha)
-    dest_y_max = -widtha
-    divide1 = y_diffrance / distance_result
-    devide2 = x_diffrance / distance_result
-    trace = minimum_x_distance * devide2 - dest_y_min * divide1 + x1
-    dest_y_min = minimum_x_distance * divide1 + dest_y_min * devide2 + y1
-    minimum_x_distance = trace
-    trace = node_minmimum * devide2 - dest_y_max * divide1 + x1
-    dest_y_max = node_minmimum * divide1 + dest_y_max * devide2 + y1
-    node_minmimum = trace
-    return [(x2, y2), (int(minimum_x_distance), int(dest_y_min)), (int(node_minmimum), int(dest_y_max))]
+from src.gui.algo_func import tsp_ga, center_ga, reset_center, reset_tsp, shortest_ga, reset_shortest, \
+    reset_shortest_string, reset_tsp_string
 
 
 def GUI(file_name):
     src.gui.constants.ga.load_from_json(file_name=file_name)
-    g = src.gui.constants.ga.get_graph()
-    width = 1200
-    height = 700
     pygame.init()
     black = [0, 0, 0]
     white = [255, 255, 255]
-    size = [width, height]
+    size = [src.gui.constants.width,src.gui.constants.height]
     window = pygame.display.set_mode(size)
     center_button = Button((150, 20, 30), 2, 2, 70, 20, 'center')
-    # tsp_button = Button((150, 20, 30), 2, 2, 70, 20, 'tsp')
-
     pygame.display.set_caption("EX3 Dolev Daniel Yakov")
-    node_list = []
-    src_edge_list = []
-    dest_edge_list = []
-    arrow_head_list = []
-
     src.gui.constants.getminmax()
-
-    for node in g.get_all_v().values():
-        n_id = node.id
-        x = (node.x - src.gui.constants.minX) * src.gui.constants.factorX + src.gui.constants.incrementX
-        y = (node.y - src.gui.constants.minY) * src.gui.constants.factorY + src.gui.constants.incrementY
-        node_list.append([x, y, n_id])
-
-    for edge in src.gui.constants.ga.graph.Edges.values():
-        x1 = src.gui.constants.incrementX + (
-                g.get_all_v().get(edge.src).x - src.gui.constants.minX) * src.gui.constants.factorX
-        y1 = src.gui.constants.incrementY + (
-                g.get_all_v().get(edge.src).y - src.gui.constants.minY) * src.gui.constants.factorY
-        x2 = src.gui.constants.incrementX + (
-                g.get_all_v().get(edge.dest).x - src.gui.constants.minX) * src.gui.constants.factorX
-        y2 = src.gui.constants.incrementY + (
-                g.get_all_v().get(edge.dest).y - src.gui.constants.minY) * src.gui.constants.factorY
-        if x1 > x2:
-            y1 = y1 - 5
-            y2 = y2 - 5
-        else:
-            y1 = y1 + 5
-            y2 = y2 + 5
-        src_edge_list.append([x1, y1])
-        dest_edge_list.append([x2, y2])
-        arrow_head_list.append(draw_arrow(x1, y1, x2, y2))
-
+    src.gui.constants.calculate_values()
     clock = pygame.time.Clock()
     pygame.font.init()
     myfont = pygame.font.SysFont('Comic Sans MS', 10)
+    base_font_tsp = pygame.font.Font(None, 20)
+    input_rect_tsp = pygame.Rect(0, 25, 140, 20)
+    color_active_tsp = (102, 51, 153)
+    color_passive_tsp = (216, 191, 216)
+    active_tsp = False
 
-    base_font = pygame.font.Font(None, 30)
-    user_text = 'tsp'
-    input_rect = pygame.Rect(0, 25, 140, 32)
-    color_active = (102, 51, 153)
-    color_passive = (216, 191, 216)
-    color = color_passive
-    active = False
+    base_font_shortest = pygame.font.Font(None, 20)
+    input_rect_shortest = pygame.Rect(0, 50, 140, 20)
+    color_active_shortest = (102, 51, 153)
+    color_passive_shortest = (216, 191, 216)
+    active_shortest = False
 
     done = False
     while not done:
@@ -127,39 +40,61 @@ def GUI(file_name):
                 done = True
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if active == True:
+                if active_tsp == True:
                     if event.key == pygame.K_BACKSPACE:
-                        user_text = user_text[:-1]
+                        src.gui.constants.user_text_tsp = src.gui.constants.user_text_tsp[:-1]
                     elif event.key == pygame.K_RETURN:
-                        tsp_ga(user_text)
-                        user_text = 'tsp'
-                        active = False
+                        cost = tsp_ga(src.gui.constants.user_text_tsp)
+                        src.gui.constants.user_text_tsp = "{:.4f}".format(cost)
+                        timeout = Timer(5.0, reset_tsp_string)
+                        timeout.start()
+                        active_tsp = False
                     else:
-                        user_text += event.unicode
+                        src.gui.constants.user_text_tsp += event.unicode
+
+                if active_shortest == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        src.gui.constants.user_text_shortest = src.gui.constants.user_text_shortest[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        cost = shortest_ga(src.gui.constants.user_text_shortest)
+                        src.gui.constants.user_text_shortest = "{:.4f}".format(cost)
+                        timeout = Timer(5.0, reset_shortest_string)
+                        timeout.start()
+                        active_shortest = False
+                    else:
+                        src.gui.constants.user_text_shortest += event.unicode
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if input_rect.collidepoint(event.pos):
-                        active = True
-                        user_text = ''
+                    if input_rect_tsp.collidepoint(event.pos):
+                        active_tsp = True
+                        src.gui.constants.user_text_tsp = ''
                     else:
-                        active = False
+                        active_tsp = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_shortest.collidepoint(event.pos):
+                        active_shortest = True
+                        src.gui.constants.user_text_shortest = ''
+                    else:
+                        active_shortest = False
 
         window.fill(white)
 
-        for edge in range(len(src_edge_list)):
-            pygame.draw.line(window, black, src_edge_list[edge], dest_edge_list[edge])
-            pygame.draw.polygon(window, [46, 139, 87], arrow_head_list[edge])
+        for edge in range(len(src.gui.constants.src_edge_list)):
+            pygame.draw.line(window, black, src.gui.constants.src_edge_list[edge],
+                             src.gui.constants.dest_edge_list[edge])
+            pygame.draw.polygon(window, [46, 139, 87], src.gui.constants.arrow_head_list[edge])
 
-        for nodeV in node_list:
+        for nodeV in src.gui.constants.node_list:
             pygame.draw.circle(window, black, [nodeV[0], nodeV[1]], 10)
-            textsurface = myfont.render(f"{nodeV[2]}", False, white)
+            textsurface = myfont.render(f"{nodeV[2]}", True, white)
             window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
 
             if src.gui.constants.center_node == nodeV[2]:
-                pygame.draw.circle(window, (26, 10, 166), [nodeV[0], nodeV[1]], 10)
-                textsurface = myfont.render(f"{nodeV[2]}", False, white)
+                pygame.draw.circle(window, (26, 10, 166), [nodeV[0], nodeV[1]], 15)
+                textsurface = myfont.render(f"{nodeV[2]}", True, white)
                 window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
                 timeout = Timer(5.0, reset_center)
                 timeout.start()
@@ -167,19 +102,36 @@ def GUI(file_name):
             if src.gui.constants.tsp_list is not None:
                 if nodeV[2] in src.gui.constants.tsp_list:
                     pygame.draw.circle(window, (140, 64, 6), [nodeV[0], nodeV[1]], 10)
-                    textsurface = myfont.render(f"{nodeV[2]}", False, white)
+                    textsurface = myfont.render(f"{nodeV[2]}", True, white)
                     window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
                     timeout2 = Timer(5.0, reset_tsp)
                     timeout2.start()
 
-        if active:
-            color = color_active
+            if src.gui.constants.shortest_list is not None:
+                if nodeV[2] in src.gui.constants.shortest_list:
+                    pygame.draw.circle(window, (140, 64, 6), [nodeV[0], nodeV[1]], 10)
+                    textsurface = myfont.render(f"{nodeV[2]}", True, white)
+                    window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
+                    timeout2 = Timer(5.0, reset_shortest)
+                    timeout2.start()
+
+        if active_tsp:
+            color_tsp = color_active_tsp
         else:
-            color = color_passive
-        pygame.draw.rect(window, color, input_rect, 2)
-        text_surface = base_font.render(user_text, True, (0, 0, 128))
-        window.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
-        input_rect.w = max(text_surface.get_width() + 10, 75)
+            color_tsp = color_passive_tsp
+        pygame.draw.rect(window, color_tsp, input_rect_tsp, 2)
+        text_surface = base_font_tsp.render(src.gui.constants.user_text_tsp, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_tsp.x + 5, input_rect_tsp.y + 5))
+        input_rect_tsp.w = max(text_surface.get_width() + 10, 73)
+        
+        if active_shortest:
+            color_shortest = color_active_shortest
+        else:
+            color_shortest = color_passive_shortest
+        pygame.draw.rect(window, color_shortest, input_rect_shortest, 2)
+        text_surface = base_font_shortest.render(src.gui.constants.user_text_shortest, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_shortest.x + 5, input_rect_shortest.y + 5))
+        input_rect_shortest.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         pygame.display.flip()
