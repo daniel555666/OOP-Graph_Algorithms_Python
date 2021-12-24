@@ -89,8 +89,10 @@ class DiGraph(GraphInterface):
                 dest_key = int(key.split("_")[1])
                 if src_key == node_id:
                     del self.Edges[f"{src_key}_{dest_key}"]
-                    del self.EdgesIn[dest_key][src_key]
-                    del self.EdgesOut[dest_key][src_key]
+                    # del self.EdgesIn[dest_key][src_key]
+                    # del self.EdgesOut[dest_key][src_key]
+                    self.EdgesOut[dest_key].pop(src_key, None)
+                    self.EdgesIn[dest_key].pop(src_key, None)
 
                 if dest_key == node_id:
                     del self.Edges[f"{src_key}_{dest_key}"]

@@ -7,10 +7,10 @@ ga = GraphAlgo()
 user_text_shortest = 'shortest'
 user_text_tsp = 'tsp'
 user_text_add_node = 'add node'
+user_text_remove_node = 'remove node'
 
 shortest_list = None
 tsp_list = None
-
 
 width = 1200
 height = 700
@@ -53,7 +53,8 @@ def getminmax():
 
     factorX = width / scaleX * 0.8
     factorY = height / scaleY * 0.8
-    return (maxX,maxY,minX,minY)
+    return {maxX, maxY, minX, minY, scaleX, scaleY, factorX, factorY}
+
 
 def calculate_values():
     g = ga.get_graph()

@@ -5,6 +5,10 @@ def reset_add_node_string():
     src.gui.constants.user_text_add_node = 'add node'
 
 
+def reset_remove_node_string():
+    src.gui.constants.user_text_remove_node = 'remove node'
+
+
 def add_node_g(user_text_add_node):
     split_str = user_text_add_node.split(",")
     if len(split_str) == 3:
@@ -22,3 +26,14 @@ def add_node_g(user_text_add_node):
         src.gui.constants.calculate_values()
         return value
 
+
+def remove_node_g(user_text_remove_node):
+    input_str = user_text_remove_node
+    if input_str.isnumeric():
+        node_id = int(input_str)
+        value = src.gui.constants.ga.get_graph().remove_node(node_id)
+        src.gui.constants.getminmax()
+        src.gui.constants.calculate_values()
+        return value
+    else:
+        return False

@@ -5,7 +5,7 @@ from src.gui.Button import Button
 import src.gui.constants
 from src.gui.algo_func import tsp_ga, center_ga, reset_center, reset_tsp, shortest_ga, reset_shortest, \
     reset_shortest_string, reset_tsp_string
-from src.gui.graph_func import add_node_g, reset_add_node_string
+from src.gui.graph_func import add_node_g, reset_add_node_string, remove_node_g, reset_remove_node_string
 
 
 def GUI(file_name):
@@ -35,10 +35,17 @@ def GUI(file_name):
     active_shortest = False
 
     base_font_add_node = pygame.font.Font(None, 20)
-    input_rect_add_node = pygame.Rect(80, 2, 140, 20)
+    input_rect_add_node = pygame.Rect(80, 1, 140, 20)
     color_active_add_node = (102, 51, 153)
     color_passive_add_node = (216, 191, 216)
     active_add_node = False
+
+    base_font_remove_node = pygame.font.Font(None, 20)
+    input_rect_remove_node = pygame.Rect(80, 22, 140, 20)
+    color_active_remove_node = (102, 51, 153)
+    color_passive_remove_node = (216, 191, 216)
+    active_remove_node = False
+
 
     done = False
     while not done:
@@ -77,12 +84,25 @@ def GUI(file_name):
                     elif event.key == pygame.K_RETURN:
                         cost = add_node_g(src.gui.constants.user_text_add_node)
                         src.gui.constants.user_text_add_node = str(cost)
-                        timeout = Timer(5.0, reset_add_node_string)
+                        timeout = Timer(2.0, reset_add_node_string)
                         timeout.start()
                         active_add_node = False
                         pygame.display.flip()
                     else:
                         src.gui.constants.user_text_add_node += event.unicode
+
+                if active_remove_node == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        src.gui.constants.user_text_remove_node = src.gui.constants.user_text_remove_node[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        cost = remove_node_g(src.gui.constants.user_text_remove_node)
+                        src.gui.constants.user_text_remove_node = str(cost)
+                        timeout = Timer(2.0, reset_remove_node_string)
+                        timeout.start()
+                        active_remove_node = False
+                        pygame.display.flip()
+                    else:
+                        src.gui.constants.user_text_remove_node += event.unicode
 
 
 
@@ -107,6 +127,13 @@ def GUI(file_name):
                         src.gui.constants.user_text_add_node = ''
                     else:
                         active_add_node = False
+                        
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_remove_node.collidepoint(event.pos):
+                        active_remove_node = True
+                        src.gui.constants.user_text_remove_node = ''
+                    else:
+                        active_remove_node = False
 
         window.fill(white)
 
@@ -169,6 +196,15 @@ def GUI(file_name):
         text_surface = base_font_add_node.render(src.gui.constants.user_text_add_node, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_add_node.x + 5, input_rect_add_node.y + 5))
         input_rect_add_node.w = max(text_surface.get_width() + 10, 73)
+
+        if active_remove_node:
+            color_remove_node = color_active_remove_node
+        else:
+            color_remove_node = color_passive_remove_node
+        pygame.draw.rect(window, color_remove_node, input_rect_remove_node, 2)
+        text_surface = base_font_remove_node.render(src.gui.constants.user_text_remove_node, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_remove_node.x + 5, input_rect_remove_node.y + 5))
+        input_rect_remove_node.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         pygame.display.flip()
