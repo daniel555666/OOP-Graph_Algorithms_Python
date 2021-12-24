@@ -10,6 +10,7 @@ user_text_add_node = 'add node'
 user_text_remove_node = 'remove node'
 user_text_remove_edge = 'remove edge'
 user_text_add_edge = 'add edge'
+user_text_node_loc = 'hide location'
 
 shortest_list = None
 tsp_list = None
@@ -76,7 +77,7 @@ def calculate_values():
         n_id = node.id
         x = (node.x - minX) * factorX + incrementX
         y = (node.y - minY) * factorY + incrementY
-        node_list.append([x, y, n_id])
+        node_list.append([x, y, n_id , node.x , node.y])
 
     for edge in ga.graph.Edges.values():
         x1 = incrementX + (

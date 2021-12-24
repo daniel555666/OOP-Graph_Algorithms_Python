@@ -59,6 +59,12 @@ def GUI(file_name):
     color_passive_add_edge = (216, 191, 216)
     active_add_edge = False
 
+    base_font_node_loc = pygame.font.Font(None, 20)
+    input_rect_node_loc = pygame.Rect(280, 1, 140, 20)
+    color_active_node_loc = (102, 51, 153)
+    color_passive_node_loc = (216, 191, 216)
+    active_node_loc = False
+    node_loc_font = pygame.font.Font(None, 20)
 
     done = False
     while not done:
@@ -116,7 +122,7 @@ def GUI(file_name):
                         pygame.display.flip()
                     else:
                         src.gui.constants.user_text_remove_node += event.unicode
-                        
+
                 if active_remove_edge == True:
                     if event.key == pygame.K_BACKSPACE:
                         src.gui.constants.user_text_remove_edge = src.gui.constants.user_text_remove_edge[:-1]
@@ -143,8 +149,6 @@ def GUI(file_name):
                     else:
                         src.gui.constants.user_text_add_edge += event.unicode
 
-
-
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
@@ -169,7 +173,7 @@ def GUI(file_name):
                     else:
                         active_add_node = False
                         src.gui.constants.user_text_add_node = 'add node'
-                        
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_remove_node.collidepoint(event.pos):
                         active_remove_node = True
@@ -194,6 +198,13 @@ def GUI(file_name):
                         active_add_edge = False
                         src.gui.constants.user_text_add_edge = 'add edge'
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_node_loc.collidepoint(event.pos):
+                        active_node_loc = not active_node_loc
+                        if  active_node_loc is False:
+                            src.gui.constants.user_text_node_loc = 'hide location'
+                        else:
+                            src.gui.constants.user_text_node_loc = 'show location'
 
         window.fill(white)
 
@@ -229,6 +240,15 @@ def GUI(file_name):
                     window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
                     timeout2 = Timer(5.0, reset_shortest)
                     timeout2.start()
+
+            if active_node_loc is False:
+                pygame.draw.circle(window, black, [nodeV[0], nodeV[1]], 10)
+                textsurface = myfont.render(f"{nodeV[2]}", True, white)
+                window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
+                x_loc = "{:.2f}".format(nodeV[3])
+                y_loc = "{:.2f}".format(nodeV[4])
+                location_surface = node_loc_font.render(f"({x_loc}, {y_loc})", True, black)
+                window.blit(location_surface, (nodeV[0] - 25, nodeV[1] - 25))
 
         if active_tsp:
             color_tsp = color_active_tsp
@@ -283,6 +303,15 @@ def GUI(file_name):
         text_surface = base_font_add_edge.render(src.gui.constants.user_text_add_edge, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_add_edge.x + 5, input_rect_add_edge.y + 5))
         input_rect_add_edge.w = max(text_surface.get_width() + 10, 73)
+
+        if active_node_loc:
+            color_node_loc = color_passive_node_loc
+        else:
+            color_node_loc = color_active_node_loc
+        pygame.draw.rect(window, color_node_loc, input_rect_node_loc, 2)
+        text_surface = base_font_node_loc.render(src.gui.constants.user_text_node_loc, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_node_loc.x + 5, input_rect_node_loc.y + 5))
+        input_rect_node_loc.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         pygame.display.flip()
