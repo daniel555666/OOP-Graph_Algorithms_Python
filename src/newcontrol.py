@@ -14,14 +14,24 @@ import src.gui.constants
 def reset_center():
     src.gui.constants.center_node = None
 
+def reset_tsp():
+    src.gui.constants.tsp_list = None
+
 
 def center_ga():
     (center_n, a) = src.gui.constants.ga.centerPoint()
     src.gui.constants.center_node = center_n
 
-def tsp_ga():
-    (tsp_l, a) = src.gui.constants.ga.TSP()
+
+def tsp_ga(user_text):
+    split_str = user_text.split(",")
+    node_id_list = []
+    for s in split_str:
+        node_id_list.append(int(s))
+    (tsp_l, a) = src.gui.constants.ga.TSP(node_id_list)
     src.gui.constants.tsp_list = tsp_l
+    print(src.gui.constants.tsp_list)
+
 
 def draw_arrow(x1, y1, x2, y2, size=12, widtha=5):
     """
@@ -63,6 +73,7 @@ def GUI(file_name):
     size = [width, height]
     window = pygame.display.set_mode(size)
     center_button = Button((150, 20, 30), 2, 2, 70, 20, 'center')
+    # tsp_button = Button((150, 20, 30), 2, 2, 70, 20, 'tsp')
 
     pygame.display.set_caption("EX3 Dolev Daniel Yakov")
     node_list = []
@@ -101,14 +112,39 @@ def GUI(file_name):
     pygame.font.init()
     myfont = pygame.font.SysFont('Comic Sans MS', 10)
 
+    base_font = pygame.font.Font(None, 30)
+    user_text = 'tsp'
+    input_rect = pygame.Rect(0, 25, 140, 32)
+    color_active = (102, 51, 153)
+    color_passive = (216, 191, 216)
+    color = color_passive
+    active = False
+
     done = False
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if active == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        user_text = user_text[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        tsp_ga(user_text)
+                        user_text = 'tsp'
+                        active = False
+                    else:
+                        user_text += event.unicode
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect.collidepoint(event.pos):
+                        active = True
+                        user_text = ''
+                    else:
+                        active = False
 
         window.fill(white)
 
@@ -127,6 +163,23 @@ def GUI(file_name):
                 window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
                 timeout = Timer(5.0, reset_center)
                 timeout.start()
+
+            if src.gui.constants.tsp_list is not None:
+                if nodeV[2] in src.gui.constants.tsp_list:
+                    pygame.draw.circle(window, (140, 64, 6), [nodeV[0], nodeV[1]], 10)
+                    textsurface = myfont.render(f"{nodeV[2]}", False, white)
+                    window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
+                    timeout2 = Timer(5.0, reset_tsp)
+                    timeout2.start()
+
+        if active:
+            color = color_active
+        else:
+            color = color_passive
+        pygame.draw.rect(window, color, input_rect, 2)
+        text_surface = base_font.render(user_text, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect.x + 5, input_rect.y + 5))
+        input_rect.w = max(text_surface.get_width() + 10, 75)
 
         center_button.draw(window)
         pygame.display.flip()
