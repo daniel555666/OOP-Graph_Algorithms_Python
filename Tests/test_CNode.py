@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.Classes.CNode import CNode
+from Classes.CNode import CNode
 
 
 class TestCNode(TestCase):

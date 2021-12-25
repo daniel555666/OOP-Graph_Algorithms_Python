@@ -1,2 +1,4 @@
 matplotlib~=3.5.1
 numpy~=1.21.5
+pygame~=2.1.0
+pygame-menu~=4.2.0

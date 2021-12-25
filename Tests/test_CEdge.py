@@ -1,5 +1,5 @@
 from unittest import TestCase
-from src.Classes.CEdge import CEdge
+from Classes.CEdge import CEdge
 
 
 class TestCEdge(TestCase):

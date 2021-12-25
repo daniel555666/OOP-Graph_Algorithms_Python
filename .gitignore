@@ -141,3 +141,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/save/dolev.json
+/save/dolev5.json
+/save/tre.json
+/save/yakov9.json
