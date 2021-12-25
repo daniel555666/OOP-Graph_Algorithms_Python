@@ -55,7 +55,7 @@ def getminmax():
     factorY = 0
 
     for node in ga.graph.get_all_v().values():
-        if node.x is not None and node.y is not None :
+        if node.x is not None and node.y is not None:
             minX = min(minX, node.x)
             maxX = max(maxX, node.x)
             minY = min(minY, node.y)
@@ -63,6 +63,10 @@ def getminmax():
 
     scaleX = abs(maxX - minX)
     scaleY = abs(maxY - minY)
+
+    if scaleX == 0 or scaleY == 0:
+        scaleX = 2
+        scaleY = 1
 
     factorX = width / scaleX * 0.8
     factorY = height / scaleY * 0.8
@@ -77,25 +81,29 @@ def calculate_values():
     arrow_head_list.clear()
     for node in g.get_all_v().values():
         n_id = node.id
-        x = (node.x - minX) * factorX + incrementX
-        y = (node.y - minY) * factorY + incrementY
-        node_list.append([x, y, n_id, node.x, node.y])
+        if node.x is not None and node.y is not None and node.z is not None:
+            x = (node.x - minX) * factorX + incrementX
+            y = (node.y - minY) * factorY + incrementY
+            node_list.append([x, y, n_id, node.x, node.y])
 
     for edge in ga.graph.Edges.values():
-        x1 = incrementX + (
-                g.get_all_v().get(edge.src).x - minX) * factorX
-        y1 = incrementY + (
-                g.get_all_v().get(edge.src).y - minY) * factorY
-        x2 = incrementX + (
-                g.get_all_v().get(edge.dest).x - minX) * factorX
-        y2 = incrementY + (
-                g.get_all_v().get(edge.dest).y - minY) * factorY
-        if x1 > x2:
-            y1 = y1 - 5
-            y2 = y2 - 5
-        else:
-            y1 = y1 + 5
-            y2 = y2 + 5
-        src_edge_list.append([x1, y1, edge.w])
-        dest_edge_list.append([x2, y2, edge.w])
-        arrow_head_list.append(draw_arrow(x1, y1, x2, y2))
+        if g.get_all_v().get(edge.src).x is not None and g.get_all_v().get(
+                edge.src).y is not None and g.get_all_v().get(edge.dest).x is not None and g.get_all_v().get(
+            edge.dest).y:
+            x1 = incrementX + (
+                    g.get_all_v().get(edge.src).x - minX) * factorX
+            y1 = incrementY + (
+                    g.get_all_v().get(edge.src).y - minY) * factorY
+            x2 = incrementX + (
+                    g.get_all_v().get(edge.dest).x - minX) * factorX
+            y2 = incrementY + (
+                    g.get_all_v().get(edge.dest).y - minY) * factorY
+            if x1 > x2:
+                y1 = y1 - 5
+                y2 = y2 - 5
+            else:
+                y1 = y1 + 5
+                y2 = y2 + 5
+            src_edge_list.append([x1, y1, edge.w])
+            dest_edge_list.append([x2, y2, edge.w])
+            arrow_head_list.append(draw_arrow(x1, y1, x2, y2))

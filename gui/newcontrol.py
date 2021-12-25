@@ -19,6 +19,7 @@ def prompt_file():
     top.destroy()
     return file_name
 
+
 def GUI():
     pygame.init()
     black = [0, 0, 0]
@@ -27,9 +28,12 @@ def GUI():
     window = pygame.display.set_mode(size)
     center_button = Button((150, 20, 30), 2, 2, 70, 20, 'center')
     load_button = Button((32, 150, 51), 400, 2, 70, 20, 'load')
+    plot_button = Button((158, 136, 47), 500, 2, 70, 20, 'plot g')
     pygame.display.set_caption("EX3 Dolev Daniel Yakov")
+
     gui.constants.getminmax()
     gui.constants.calculate_values()
+
     clock = pygame.time.Clock()
     pygame.font.init()
     myfont = pygame.font.SysFont('Comic Sans MS', 10)
@@ -193,7 +197,10 @@ def GUI():
                         gui.constants.ga.load_from_json(path_str)
                         gui.constants.getminmax()
                         gui.constants.calculate_values()
-
+                if plot_button.isOver(pygame.mouse.get_pos()):
+                    gui.constants.ga.plot_graph()
+                    gui.constants.getminmax()
+                    gui.constants.calculate_values()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_tsp.collidepoint(event.pos):
@@ -314,7 +321,6 @@ def GUI():
                     timeout2 = Timer(5.0, reset_shortest)
                     timeout2.start()
 
-
         if active_tsp:
             color_tsp = color_active_tsp
         else:
@@ -398,6 +404,7 @@ def GUI():
 
         center_button.draw(window)
         load_button.draw(window)
+        plot_button.draw(window)
         pygame.display.flip()
         clock.tick(20)
     pygame.quit()
