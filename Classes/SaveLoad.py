@@ -33,9 +33,14 @@ def save(file_name, graph) -> bool:
     dict_json = {'Nodes': [], 'Edges': []}
     for key, node in Nodes.items():
         id_node = node.id
-        pos_string = str(node.x) + ',' + str(node.y) + ',' + str(node.z)
-        node_dict_individual = {"id": id_node, "pos": pos_string}
-        dict_json['Nodes'].append(node_dict_individual)
+        if node.x is not None and node.y is not None and node.z is not None:
+            pos_string = str(node.x) + ',' + str(node.y) + ',' + str(node.z)
+            node_dict_individual = {"id": id_node, "pos": pos_string}
+            dict_json['Nodes'].append(node_dict_individual)
+        else:
+            node_dict_individual = {"id": id_node}
+            dict_json['Nodes'].append(node_dict_individual)
+
     Edges = graph.Edges
     for key, edge in Edges.items():
         src_edge = edge.src
@@ -45,8 +50,9 @@ def save(file_name, graph) -> bool:
         dict_json['Edges'].append(edge_dict_individual)
     str_file = "./save/" + file_name + '.json'
     try:
-        with open(str_file, 'w') as f:
+        with open(str_file, 'w+') as f:
             json.dump(dict_json, f, indent=6)
             return True
-    except:
+    except Exception as e:
+        print(e)
         return False
