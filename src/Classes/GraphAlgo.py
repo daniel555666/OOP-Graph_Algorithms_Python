@@ -24,7 +24,7 @@ class GraphAlgo(GraphAlgoInterface):
         a = 5
 
     def save_to_json(self, file_name: str) -> bool:
-        pass
+        return SaveLoad.save(file_name , self.graph)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         graph = self.graph

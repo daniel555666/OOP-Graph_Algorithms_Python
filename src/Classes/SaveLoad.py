@@ -29,3 +29,27 @@ def load(file_name):
     for e in graph_dict["Edges"]:
         graph.add_edge(int(e["src"]), int(e["dest"]), float(e["w"]))
     return graph
+
+
+def save(file_name, graph) -> bool:
+    Nodes = graph.Nodes
+    dict_json = {'Nodes': [], 'Edges': []}
+    for key, node in Nodes.items():
+        id_node = node.id
+        pos_string = str(node.x) + ',' + str(node.y) + ',' + str(node.z)
+        node_dict_individual = {"id": id_node, "pos": pos_string}
+        dict_json['Nodes'].append(node_dict_individual)
+    Edges = graph.Edges
+    for key, edge in Edges.items():
+        src_edge = edge.src
+        dest_edge = edge.dest
+        w_edge = edge.w
+        edge_dict_individual = {'src': src_edge, 'w': w_edge, 'dest': dest_edge}
+        dict_json['Edges'].append(edge_dict_individual)
+    str_file = "./save/" + file_name + '.json'
+    try:
+        with open(str_file, 'w') as f:
+            json.dump(dict_json, f, indent=6)
+            return True
+    except:
+        return False

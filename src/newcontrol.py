@@ -6,7 +6,7 @@ import pygame
 from src.gui.Button import Button
 import src.gui.constants
 from src.gui.algo_func import tsp_ga, center_ga, reset_center, reset_tsp, shortest_ga, reset_shortest, \
-    reset_shortest_string, reset_tsp_string
+    reset_shortest_string, reset_tsp_string, save_json_ga, reset_save_json_string
 from src.gui.graph_func import add_node_g, reset_add_node_string, remove_node_g, reset_remove_node_string, \
     remove_edge_g, reset_remove_edge_string, add_edge_g, reset_add_edge_string
 
@@ -83,6 +83,12 @@ def GUI(file_name):
     color_passive_edge_weight = (216, 191, 216)
     active_edge_weight = False
     edge_weight_font = pygame.font.Font(None, 20)
+
+    base_font_save_json = pygame.font.Font(None, 20)
+    input_rect_save_json = pygame.Rect(380, 22, 140, 20)
+    color_active_save_json = (102, 51, 153)
+    color_passive_save_json = (216, 191, 216)
+    active_save_json = False
 
     done = False
     while not done:
@@ -167,14 +173,27 @@ def GUI(file_name):
                     else:
                         src.gui.constants.user_text_add_edge += event.unicode
 
+                if active_save_json == True:
+                    if event.key == pygame.K_BACKSPACE:
+                        src.gui.constants.user_text_save_json = src.gui.constants.user_text_save_json[:-1]
+                    elif event.key == pygame.K_RETURN:
+                        cost = save_json_ga(src.gui.constants.user_text_save_json)
+                        src.gui.constants.user_text_save_json = str(cost)
+                        timeout = Timer(2.0, reset_save_json_string)
+                        timeout.start()
+                        active_save_json = False
+                    else:
+                        src.gui.constants.user_text_save_json += event.unicode
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
                 if load_button.isOver(pygame.mouse.get_pos()):
                     path_str = prompt_file()
-                    src.gui.constants.ga.load_from_json(path_str)
-                    src.gui.constants.getminmax()
-                    src.gui.constants.calculate_values()
+                    if path_str:
+                        src.gui.constants.ga.load_from_json(path_str)
+                        src.gui.constants.getminmax()
+                        src.gui.constants.calculate_values()
 
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -184,6 +203,7 @@ def GUI(file_name):
                     else:
                         active_tsp = False
                         src.gui.constants.user_text_tsp = 'tsp'
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_shortest.collidepoint(event.pos):
                         active_shortest = True
@@ -239,6 +259,13 @@ def GUI(file_name):
                         else:
                             src.gui.constants.user_text_edge_weight = 'show weight'
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if input_rect_save_json.collidepoint(event.pos):
+                        active_save_json = True
+                        src.gui.constants.user_text_save_json = ''
+                    else:
+                        active_save_json = False
+                        src.gui.constants.user_text_save_json = 'save(filename)'
         window.fill(white)
 
         for ind in range(len(src.gui.constants.src_edge_list)):
@@ -258,6 +285,12 @@ def GUI(file_name):
             pygame.draw.circle(window, black, [nodeV[0], nodeV[1]], 10)
             textsurface = myfont.render(f"{nodeV[2]}", True, white)
             window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
+
+            if active_node_loc is False:
+                x_loc = "{:.2f}".format(nodeV[3])
+                y_loc = "{:.2f}".format(nodeV[4])
+                location_surface = node_loc_font.render(f"({x_loc}, {y_loc})", True, black)
+                window.blit(location_surface, (nodeV[0] - 25, nodeV[1] - 25))
 
             if src.gui.constants.center_node == nodeV[2]:
                 pygame.draw.circle(window, (26, 10, 166), [nodeV[0], nodeV[1]], 15)
@@ -282,14 +315,6 @@ def GUI(file_name):
                     timeout2 = Timer(5.0, reset_shortest)
                     timeout2.start()
 
-            if active_node_loc is False:
-                pygame.draw.circle(window, black, [nodeV[0], nodeV[1]], 10)
-                textsurface = myfont.render(f"{nodeV[2]}", True, white)
-                window.blit(textsurface, (nodeV[0] - 7, nodeV[1] - 5))
-                x_loc = "{:.2f}".format(nodeV[3])
-                y_loc = "{:.2f}".format(nodeV[4])
-                location_surface = node_loc_font.render(f"({x_loc}, {y_loc})", True, black)
-                window.blit(location_surface, (nodeV[0] - 25, nodeV[1] - 25))
 
         if active_tsp:
             color_tsp = color_active_tsp
@@ -362,6 +387,15 @@ def GUI(file_name):
         text_surface = base_font_edge_weight.render(src.gui.constants.user_text_edge_weight, True, (0, 0, 128))
         window.blit(text_surface, (input_rect_edge_weight.x + 5, input_rect_edge_weight.y + 5))
         input_rect_edge_weight.w = max(text_surface.get_width() + 10, 73)
+
+        if active_save_json:
+            color_save_json = color_passive_save_json
+        else:
+            color_save_json = color_active_save_json
+        pygame.draw.rect(window, color_save_json, input_rect_save_json, 2)
+        text_surface = base_font_save_json.render(src.gui.constants.user_text_save_json, True, (0, 0, 128))
+        window.blit(text_surface, (input_rect_save_json.x + 5, input_rect_save_json.y + 5))
+        input_rect_save_json.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
         load_button.draw(window)

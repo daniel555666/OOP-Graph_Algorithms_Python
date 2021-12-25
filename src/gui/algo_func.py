@@ -18,6 +18,9 @@ def reset_tsp():
 def reset_shortest():
     constants.shortest_list = None
 
+def reset_save_json_string():
+    constants.user_text_save_json = 'save(filename)'
+
 
 def center_ga():
     (center_n, a) = constants.ga.centerPoint()
@@ -44,3 +47,8 @@ def shortest_ga(user_text_shortest):
     constants.shortest_list = shortest_l
     print(constants.shortest_list)
     return cost
+
+def save_json_ga(user_text_save_json):
+    cost = constants.ga.save_to_json(user_text_save_json)
+    return cost
+

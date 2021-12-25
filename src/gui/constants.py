@@ -12,6 +12,7 @@ user_text_remove_edge = 'remove edge'
 user_text_add_edge = 'add edge'
 user_text_node_loc = 'hide location'
 user_text_edge_weight = 'show weight'
+user_text_save_json = 'save(filename)'
 
 shortest_list = None
 tsp_list = None
