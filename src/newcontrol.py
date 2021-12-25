@@ -1,4 +1,6 @@
 import sys
+import tkinter
+import tkinter.filedialog
 from threading import Timer
 import pygame
 from src.gui.Button import Button
@@ -9,6 +11,14 @@ from src.gui.graph_func import add_node_g, reset_add_node_string, remove_node_g,
     remove_edge_g, reset_remove_edge_string, add_edge_g, reset_add_edge_string
 
 
+def prompt_file():
+    """Create a Tk file dialog and cleanup when finished"""
+    top = tkinter.Tk()
+    top.withdraw()  # hide window
+    file_name = tkinter.filedialog.askopenfilename(parent=top, initialdir="./data")
+    top.destroy()
+    return file_name
+
 def GUI(file_name):
     src.gui.constants.ga.load_from_json(file_name=file_name)
     pygame.init()
@@ -17,6 +27,7 @@ def GUI(file_name):
     size = [src.gui.constants.width, src.gui.constants.height]
     window = pygame.display.set_mode(size)
     center_button = Button((150, 20, 30), 2, 2, 70, 20, 'center')
+    load_button = Button((32, 150, 51), 400, 2, 70, 20, 'load')
     pygame.display.set_caption("EX3 Dolev Daniel Yakov")
     src.gui.constants.getminmax()
     src.gui.constants.calculate_values()
@@ -159,6 +170,13 @@ def GUI(file_name):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if center_button.isOver(pygame.mouse.get_pos()):
                     center_ga()
+                if load_button.isOver(pygame.mouse.get_pos()):
+                    path_str = prompt_file()
+                    src.gui.constants.ga.load_from_json(path_str)
+                    src.gui.constants.getminmax()
+                    src.gui.constants.calculate_values()
+
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if input_rect_tsp.collidepoint(event.pos):
                         active_tsp = True
@@ -346,6 +364,7 @@ def GUI(file_name):
         input_rect_edge_weight.w = max(text_surface.get_width() + 10, 73)
 
         center_button.draw(window)
+        load_button.draw(window)
         pygame.display.flip()
         clock.tick(20)
     pygame.quit()
