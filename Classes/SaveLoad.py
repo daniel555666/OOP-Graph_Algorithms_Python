@@ -12,13 +12,10 @@ def load(file_name):
 
     for n in graph_dict["Nodes"]:
         if "pos" not in n:
-            NODEMAXVALUEX = 35.23
-            NODEMAXVALUEY = 32.2
-            NODEMINVALUEY = 32.101
-            NODEMINVALUEX = 35.177
-            x = random.uniform(NODEMINVALUEX, NODEMAXVALUEX)
-            y = random.uniform(NODEMINVALUEY, NODEMAXVALUEY)
-            xyz = (x, y, 0.0)
+            x = None
+            y = None
+            z = None
+            xyz = (x, y, z)
             node_id = int(n["id"])
             graph.add_node(node_id, xyz)
         else:

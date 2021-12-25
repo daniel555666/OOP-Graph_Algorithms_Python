@@ -66,7 +66,7 @@ def getminmax():
 
     factorX = width / scaleX * 0.8
     factorY = height / scaleY * 0.8
-    return {maxX, maxY, minX, minY, scaleX, scaleY, factorX, factorY}
+    return [maxX, maxY, minX, minY]
 
 
 def calculate_values():

@@ -1,5 +1,5 @@
 import heapq
-
+import random
 import sys
 from math import inf
 
@@ -8,7 +8,6 @@ from typing import List
 from Classes import SaveLoad
 from interfaces.GraphAlgoInterface import GraphAlgoInterface
 from interfaces.GraphInterface import GraphInterface
-from gui.constants import getminmax
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -62,18 +61,38 @@ class GraphAlgo(GraphAlgoInterface):
 
         '''
         counter = 0
+        minX = 100000000
+        maxX = (-1) * 100000000
+        minY = 100000000
+        maxY = (-1) * 100000000
+
         for node in self.get_graph().get_all_v().values():
             if node.x == None and node.y == None and node.z == None:
                 counter += 1
+            else:
+                minX = min(minX, node.x)
+                maxX = max(maxX, node.x)
+                minY = min(minY, node.y)
+                maxY = max(maxY, node.y)
 
-        if counter is not self.get_graph().v_size() :
-            min_max_values = getminmax()
+        if counter != 0:
+            if counter == self.get_graph().v_size():
+                minX = 20
+                maxX = 35
+                minY = 20
+                maxY = 30
 
+            if counter == (self.get_graph().v_size()-1) :
+                   minX += -5
+                   maxX += 5
+                   minY += -5
+                   maxY += 5
 
-
-
-
-
+        for node in self.get_graph().get_all_v().values():
+                if node.x == None and node.y == None and node.z == None:
+                    node.x = random.uniform(minX, maxX)
+                    node.y = random.uniform(minY, maxY)
+                    node.z = 0.0
 
     def get_graph(self) -> GraphInterface:
         return self.graph
