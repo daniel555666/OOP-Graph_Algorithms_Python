@@ -1,7 +1,7 @@
 import json
 import random
 
-from src.Classes.DiGraph import DiGraph
+from Classes.DiGraph import DiGraph
 
 
 def load(file_name):

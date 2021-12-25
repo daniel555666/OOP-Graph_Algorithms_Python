@@ -1,17 +1,13 @@
 import heapq
-import json
 
 import sys
 from math import inf
-from queue import PriorityQueue
 
 from typing import List
 
-from src.Classes import SaveLoad
-from src.Classes.CNode import CNode
-from src.Classes.DiGraph import DiGraph
-from src.interfaces.GraphAlgoInterface import GraphAlgoInterface
-from src.interfaces.GraphInterface import GraphInterface
+from Classes import SaveLoad
+from interfaces.GraphAlgoInterface import GraphAlgoInterface
+from interfaces.GraphInterface import GraphInterface
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -24,7 +20,7 @@ class GraphAlgo(GraphAlgoInterface):
         a = 5
 
     def save_to_json(self, file_name: str) -> bool:
-        return SaveLoad.save(file_name , self.graph)
+        return SaveLoad.save(file_name, self.graph)
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         graph = self.graph

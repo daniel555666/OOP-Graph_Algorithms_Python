@@ -1,8 +1,7 @@
 from unittest import TestCase
 
-from src.Classes.CNode import CNode
-from src.Classes.DiGraph import DiGraph
-from src.Classes.GraphAlgo import GraphAlgo
+from Classes.CNode import CNode
+from Classes.DiGraph import DiGraph
 
 
 class TestDiGraph(TestCase):

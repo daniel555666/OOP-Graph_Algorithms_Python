@@ -1,5 +1,5 @@
-from src.Classes.DiGraph import DiGraph
-from src.Classes.GraphAlgo import GraphAlgo
+from Classes.DiGraph import DiGraph
+from Classes.GraphAlgo import GraphAlgo
 
 
 def check():
@@ -55,7 +55,7 @@ def check1():
     :return:
     """
     g_algo = GraphAlgo()  # init an empty graph - for the GraphAlgo
-    file = "./data/T0.json"
+    file = "data/T0.json"
     g_algo.load_from_json(file)  # init a GraphAlgo from a json file
     print(g_algo.shortest_path(0, 3))
     print(g_algo.shortest_path(3, 1))
@@ -69,7 +69,7 @@ def check2():
       :return:
       """
     g_algo = GraphAlgo()
-    file = './data/A5.json'
+    file = 'data/A5.json'
     g_algo.load_from_json(file)
     g_algo.get_graph().remove_edge(13, 14)
     g_algo.save_to_json(file + "_edited")

@@ -1,6 +1,5 @@
-from src.Classes.DiGraph import DiGraph
-from src.Classes.GraphAlgo import GraphAlgo
-from src.gui.draw_arrow import draw_arrow
+from Classes.GraphAlgo import GraphAlgo
+from gui.draw_arrow import draw_arrow
 
 ga = GraphAlgo()
 
@@ -19,8 +18,8 @@ tsp_list = None
 
 width = 1200
 height = 700
-incrementY = 50
-incrementX = 50
+incrementY = 100
+incrementX = 100
 minX = 100000000
 maxX = (-1) * 100000000
 minY = 100000000

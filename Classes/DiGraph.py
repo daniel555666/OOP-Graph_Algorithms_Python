@@ -1,9 +1,8 @@
 import random
 
-import src.gui.constants
-from src.Classes.CEdge import CEdge
-from src.interfaces.GraphInterface import GraphInterface
-from src.Classes.CNode import CNode
+from Classes.CEdge import CEdge
+from interfaces.GraphInterface import GraphInterface
+from Classes.CNode import CNode
 
 
 class DiGraph(GraphInterface):

@@ -1,11 +1,12 @@
-import src.gui.constants
-from src.gui import constants
+import gui.constants
+from gui import constants
+
 
 def reset_tsp_string():
-    src.gui.constants.user_text_tsp = 'tsp'
+    gui.constants.user_text_tsp = 'tsp'
 
 def reset_shortest_string():
-    src.gui.constants.user_text_shortest = 'shortest'
+    gui.constants.user_text_shortest = 'shortest'
 
 def reset_center():
     constants.center_node = None
