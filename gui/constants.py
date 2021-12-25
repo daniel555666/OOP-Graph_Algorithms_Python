@@ -55,10 +55,11 @@ def getminmax():
     factorY = 0
 
     for node in ga.graph.get_all_v().values():
-        minX = min(minX, node.x)
-        maxX = max(maxX, node.x)
-        minY = min(minY, node.y)
-        maxY = max(maxY, node.y)
+        if node.x is not None and node.y is not None :
+            minX = min(minX, node.x)
+            maxX = max(maxX, node.x)
+            minY = min(minY, node.y)
+            maxY = max(maxY, node.y)
 
     scaleX = abs(maxX - minX)
     scaleY = abs(maxY - minY)

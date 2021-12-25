@@ -8,6 +8,7 @@ from typing import List
 from Classes import SaveLoad
 from interfaces.GraphAlgoInterface import GraphAlgoInterface
 from interfaces.GraphInterface import GraphInterface
+from gui.constants import getminmax
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -55,7 +56,24 @@ class GraphAlgo(GraphAlgoInterface):
         return (graph.Nodes.get(id2).length, listNodeId)
 
     def plot_graph(self) -> None:
-        pass
+        '''
+        first we need to check min and max for the excidting nodes , else it will be based on actual resolution .
+        first check if everyone has postion , then act .
+
+        '''
+        counter = 0
+        for node in self.get_graph().get_all_v().values():
+            if node.x == None and node.y == None and node.z == None:
+                counter += 1
+
+        if counter is not self.get_graph().v_size() :
+            min_max_values = getminmax()
+
+
+
+
+
+
 
     def get_graph(self) -> GraphInterface:
         return self.graph
