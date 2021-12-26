@@ -151,6 +151,11 @@ If there is only 1 node in the graph with cordinates, the other new random nodes
 * save_to_json
 * load_from_json
 
+# UML
+
+![new image](https://user-images.githubusercontent.com/62290677/147418549-2a09e887-b739-4b54-b736-de94b72482e8.png)
+
+
  
 
 ## Authors
