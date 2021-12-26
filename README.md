@@ -112,7 +112,6 @@ If there is only 1 node in the graph with cordinates, the other new random nodes
 
 ## classes functions
 
-(functions of the interfaces that not shows here is functions we didnt use because they was not relvant for this assignment or we didnt need to use them for our graph and they do nothing when using them.)
 ### CEdge class functions
 * src
 * dest
