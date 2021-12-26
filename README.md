@@ -51,6 +51,9 @@ please watch the demo to know the specific input sytax.
 **to use the tsp input box for example you will need to**
 - insert the id numbers of the node seperated by comma (' , ')
 - press the Return button on the keyboard AKA Enter button
+
+[![IMAGE ALT TEXT HERE](https://user-images.githubusercontent.com/62290677/147417843-89756c59-f705-4bda-b28d-c2324b4f7161.png)](https://www.youtube.com/watch?v=rk7QZly6sPE)
+
 ## Lessons Learned
 
 we learned to work as a team with git and github.
